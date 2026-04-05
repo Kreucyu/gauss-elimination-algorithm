@@ -18,9 +18,9 @@ Exibição das matrizes intermediárias após cada operação elementar relevant
 
 Classificação do sistema como:
 
-  SPD — Sistema Possível e Determinado
-  SPI — Sistema Possível e Indeterminado
-  SI — Sistema Impossível
+  SPD — Sistema Possível e Determinado.
+  SPI — Sistema Possível e Indeterminado.
+  SI — Sistema Impossível.
 
 Apresentação da solução completa (ex: x=1, y=2) ou solução geral em função de variáveis livres no caso de SPI
 
@@ -35,7 +35,10 @@ Sem uso de bibliotecas de álgebra linear (numpy, scipy, math.solve ou similares
 
 Casos de Teste (Validação)
 
-CasoReferênciaClassificaçãoSPDUnidade 4, Exercício 1(a)Sistema Possível e DeterminadoSPIUnidade 4, Exercício 1(b)Sistema Possível e IndeterminadoSIUnidade 3, Exercício 11(j)Sistema Impossível
+Caso Referência Classificação SPDUnidade 4.
+Exercício 1(a) Sistema Possível e Determinado SPIUnidade 4.
+Exercício 1(b) Sistema Possível e Indeterminado SIUnidade 3.
+Exercício 11(j) Sistema Impossível.
 
 ---
 
