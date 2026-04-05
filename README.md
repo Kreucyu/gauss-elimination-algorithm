@@ -11,10 +11,13 @@ Consolidar os conceitos teóricos de Matrizes, Determinantes e Sistemas Lineares
 
 Funcionalidades
 
-Leitura da matriz ampliada [A|b] via arquivo .txt ou entrada manual pelo teclado
-Escalonamento com método de Eliminação de Gauss até a forma escalonada reduzida
-Pivoteamento Parcial: troca de linhas quando o pivô atual é nulo ou próximo de zero
-Exibição das matrizes intermediárias após cada operação elementar relevante
+Leitura da matriz ampliada [A|b] via arquivo .txt ou entrada manual pelo teclado.
+
+Escalonamento com método de Eliminação de Gauss até a forma escalonada reduzida.
+
+Pivoteamento Parcial: troca de linhas quando o pivô atual é nulo ou próximo de zero.
+
+Exibição das matrizes intermediárias após cada operação elementar relevante.
 
 Classificação do sistema como:
 
@@ -28,8 +31,9 @@ Apresentação da solução completa (ex: x=1, y=2) ou solução geral em funç�
 
 Tecnologias
 
-Linguagem: Java (livre escolha conforme enunciado)
-Sem uso de bibliotecas de álgebra linear (numpy, scipy, math.solve ou similares)
+Linguagem: Java (livre escolha conforme enunciado).
+
+Sem uso de bibliotecas de álgebra linear (numpy, scipy, math.solve ou similares).
 
 ---
 
@@ -44,5 +48,6 @@ Casos de Teste (Validação)
 
 Observações
 
-O código contém comentários explicando a relação de cada função com os conceitos matemáticos envolvidos
-O relatório técnico (PDF) descreve o algoritmo de classificação, o tratamento de casos de pivô nulo e a divisão de tarefas entre os integrantes
+O código contém comentários explicando a relação de cada função com os conceitos matemáticos envolvidos.
+
+O relatório técnico (PDF) descreve o algoritmo de classificação, o tratamento de casos de pivô nulo e a divisão de tarefas entre os integrantes.
