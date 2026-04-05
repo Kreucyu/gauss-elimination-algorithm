@@ -1,10 +1,11 @@
 Solucionador de Sistemas Lineares — Eliminação de Gauss
 
-Trabalho avaliativo da disciplina de Álgebra Linear — FURB (Universidade Regional de Blumenau)
+Trabalho avaliativo da disciplina de Álgebra Linear — FURB (Universidade Regional de Blumenau).
 
 ---
 
 Objetivo
+
 Consolidar os conceitos teóricos de Matrizes, Determinantes e Sistemas Lineares através da implementação algorítmica do processo de Escalonamento (Eliminação de Gauss), sem o uso de bibliotecas prontas de álgebra linear.
 
 ---
@@ -25,7 +26,7 @@ Classificação do sistema como:
     SPI — Sistema Possível e Indeterminado.
     SI — Sistema Impossível.
 
-Apresentação da solução completa (ex: x=1, y=2) ou solução geral em função de variáveis livres no caso de SPI
+Apresentação da solução completa (ex: x=1, y=2) ou solução geral em função de variáveis livres no caso de SPI.
 
 ---
 
