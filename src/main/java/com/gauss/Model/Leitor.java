@@ -65,6 +65,7 @@ public class Leitor {
             ladoDireito.add(Integer.valueOf(partes[1]));
         }
         Map<Character, Integer> mapaVariaveis = mapearVariaveis(ladoEsquerdo);
+        mapearCoeficientes(mapaVariaveis, ladoEsquerdo);
     }
 
     private Map<Character, Integer> mapearVariaveis(List<String> ladoEsquerdo) {
@@ -90,7 +91,30 @@ public class Leitor {
         return mapaVariaveis;
     }
 
-    private void mapearCoeficientes() {
-
+    private void mapearCoeficientes(Map<Character, Integer> variaveis, List<String> ladoEsquerdo) {
+        double valor;
+        for(int i = 0; i < ladoEsquerdo.size(); i++) {
+            String[] coeficientes = ladoEsquerdo.get(i).split("(?=[+-])");
+            for(int j = 0; j < coeficientes.length; j++) {
+                    if (coeficientes[j].charAt(0) == '-') {
+                        if (Character.isDigit(coeficientes[j].charAt(1))) {
+                            valor = Double.parseDouble(coeficientes[j].replaceAll("[a-zA-Z]", ""));
+                            continue;
+                        }
+                        valor = -1;
+                    }
+                    if (coeficientes[j].charAt(0) == '+') {
+                        if (Character.isDigit(coeficientes[j].charAt(1))) {
+                            valor = Double.parseDouble(coeficientes[j].replaceAll("[a-zA-Z]", ""));
+                            continue;
+                        }
+                    }
+                    if (Character.isDigit(coeficientes[j].charAt(0))) {
+                    valor = Double.parseDouble(coeficientes[j].replaceAll("[a-zA-Z]", ""));
+                    continue;
+                    }
+                    valor = 1;
+            }
+        }
     }
 }
