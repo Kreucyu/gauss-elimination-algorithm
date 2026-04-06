@@ -29,7 +29,11 @@ public class Menu {
     }
 
     private void digitarTexto() {
-        System.out.println("\n      -> Digite seu sistema linha por linha <-\n-> Quando finalizar, digite um '.' e aperte Enter <-\n");
+        System.out.println("""
+                
+                      -> Digite seu sistema linha por linha <-
+                -> Quando finalizar, digite um '.' e aperte Enter <-
+                """);
         leitor.lerEquacaoDigitada();
     }
 
@@ -40,9 +44,12 @@ public class Menu {
 
     private void exibirOpcoes() {
         System.out.println("""
-                        \n------------ ALGORITMO DE ELIMINAÇÃO DE GAUSS | ÁLGEBRA LINEAR ------------\n
+                        
+                        ------------ ALGORITMO DE ELIMINAÇÃO DE GAUSS | ÁLGEBRA LINEAR ------------
+                        
                         Como deseja enviar o sistema?
-                        \n1-Arquivo txt
+                        
+                        1-Arquivo txt
                         2-Digitando
                         3-Encerrar
                         """);
