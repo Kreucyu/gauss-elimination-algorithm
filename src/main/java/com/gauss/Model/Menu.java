@@ -1,42 +1,50 @@
 package com.gauss.Model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public class Menu {
-    private Scanner sc;
+    private final Scanner sc;
+    private final Leitor leitor;
+
     public Menu(Scanner sc) {
         this.sc = sc;
+        this.leitor = new Leitor(sc);
     }
 
     public void exibirMenu() {
-        System.out.println("------------ ALGORITMO DE ELIMINAÇÃO DE GAUSS | ÁLGEBRA LINEAR ------------\n\nComo deseja enviar o sistema?\n1-Arquivo txt\n2-Digitando\n");
-        int opcao = sc.nextInt();
+            String opcao;
+            do {
+                exibirOpcoes();
+                opcao = sc.next().trim();
 
-        if(opcao == 1) {
-            enviarArquivo();
-            return;
-        }
-        digitarTexto();
+                switch(opcao) {
+                    case "1" -> enviarArquivo();
+                    case "2" -> digitarTexto();
+                    case "3" -> System.out.println("\nSaindo...");
+                    default -> System.out.println("\nOpção inválida!");
+                }
+
+            } while (!opcao.equals("3"));
+            sc.close();
     }
 
-    public List<String> digitarTexto() {
+    private void digitarTexto() {
         System.out.println("\n      -> Digite seu sistema linha por linha <-\n-> Quando finalizar, digite um '.' e aperte Enter <-\n");
-        List<String> linhasDigitadas = new ArrayList<>();
-        String linha;
-        while(!(linha = sc.nextLine()).equals(".")) {
-            linhasDigitadas.add(linha);
-        }
-        return linhasDigitadas;
+        leitor.lerEquacaoDigitada();
     }
 
-    public void enviarArquivo() {
-        System.out.println("\nDigite o caminho do seu arquivo: ");
-        String caminhoArquivo = sc.next();
-        Leitor leitor = new Leitor();
-        leitor.getCaminho(caminhoArquivo);
+    private void enviarArquivo() {
+        System.out.print("\nDigite o caminho do seu arquivo: ");
+        leitor.lerEquacaoArquivo();
     }
 
+    private void exibirOpcoes() {
+        System.out.println("""
+                        \n------------ ALGORITMO DE ELIMINAÇÃO DE GAUSS | ÁLGEBRA LINEAR ------------\n
+                        Como deseja enviar o sistema?
+                        \n1-Arquivo txt
+                        2-Digitando
+                        3-Encerrar
+                        """);
+    }
 }
