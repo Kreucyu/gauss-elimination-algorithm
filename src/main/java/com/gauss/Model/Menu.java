@@ -5,10 +5,12 @@ import java.util.*;
 public class Menu {
     private final Scanner sc;
     private final Leitor leitor;
+    private final Gauss gauss;
 
     public Menu(Scanner sc) {
         this.sc = sc;
         this.leitor = new Leitor(sc);
+        this.gauss = new Gauss();
     }
 
     public void exibirMenu() {
@@ -34,12 +36,12 @@ public class Menu {
                       -> Digite seu sistema linha por linha <-
                 -> Quando finalizar, digite um '.' e aperte Enter <-
                 """);
-        leitor.lerEquacaoDigitada();
+        gauss.realizarCalculo(leitor.lerEquacaoDigitada());
     }
 
     private void enviarArquivo() {
         System.out.print("\nDigite o caminho do seu arquivo: ");
-        leitor.lerEquacaoArquivo();
+        gauss.realizarCalculo(leitor.lerEquacaoArquivo());
     }
 
     private void exibirOpcoes() {
