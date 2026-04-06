@@ -7,10 +7,12 @@ public class Leitor {
     private Scanner sc;
     private String linha;
     private List<String> linhasEquacao;
+    private double[][] matriz;
 
     public Leitor(Scanner sc) {
         this.linhasEquacao = new ArrayList<>();
         this.sc = sc;
+        this.matriz = null;
     }
 
     public double[][] lerEquacaoArquivo() {
@@ -35,9 +37,8 @@ public class Leitor {
     }
 
     private double[][] obterMatriz() {
-        double[][] matriz = obterTamanhoMatriz();
+        matriz = obterTamanhoMatriz();
         separarEquacao();
-        mapearCoeficientes();
         return matriz;
     }
 
@@ -92,29 +93,32 @@ public class Leitor {
     }
 
     private void mapearCoeficientes(Map<Character, Integer> variaveis, List<String> ladoEsquerdo) {
-        double valor;
+        Map<Character, Double> mapaCoeficientes = new HashMap<>();
         for(int i = 0; i < ladoEsquerdo.size(); i++) {
             String[] coeficientes = ladoEsquerdo.get(i).split("(?=[+-])");
             for(int j = 0; j < coeficientes.length; j++) {
-                    if (coeficientes[j].charAt(0) == '-') {
-                        if (Character.isDigit(coeficientes[j].charAt(1))) {
-                            valor = Double.parseDouble(coeficientes[j].replaceAll("[a-zA-Z]", ""));
-                            continue;
-                        }
-                        valor = -1;
-                    }
-                    if (coeficientes[j].charAt(0) == '+') {
-                        if (Character.isDigit(coeficientes[j].charAt(1))) {
-                            valor = Double.parseDouble(coeficientes[j].replaceAll("[a-zA-Z]", ""));
-                            continue;
-                        }
-                    }
-                    if (Character.isDigit(coeficientes[j].charAt(0))) {
-                    valor = Double.parseDouble(coeficientes[j].replaceAll("[a-zA-Z]", ""));
-                    continue;
-                    }
-                    valor = 1;
+                String variavel = coeficientes[j].replaceAll("[^a-zA-Z]", "");
+                char variavelKey = variavel.charAt(0);
+                double valor = obterCoeficiente(coeficientes[j].replaceAll("[a-zA-Z]", ""));
+                mapaCoeficientes.put(variavelKey, valor);
             }
+            definirValoresMatriz(mapaCoeficientes, variaveis, i);
+            mapaCoeficientes.clear();
         }
     }
+
+    private double obterCoeficiente(String coeficiente) {
+        String sinal = coeficiente.replaceAll("[0-9.]", "");
+        String numero = coeficiente.replaceAll("[^0-9]", "");
+        double valor = numero.isEmpty() ? 1 : Double.parseDouble(numero);
+        return sinal.equals("-") ? -valor : + valor;
+    }
+
+    private void definirValoresMatriz(Map<Character, Double> coeficientes, Map<Character, Integer> variaveis, int linha) {
+        for(Map.Entry<Character, Double> entry : coeficientes.entrySet()) {
+            int coluna = variaveis.get(entry.getKey());
+            matriz[linha][coluna] = entry.getValue();
+        }
+    }
+
 }
