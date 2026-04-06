@@ -36,7 +36,8 @@ public class Leitor {
 
     private double[][] obterMatriz() {
         double[][] matriz = obterTamanhoMatriz();
-        separarEquacao(matriz);
+        separarEquacao();
+        mapearCoeficientes();
         return matriz;
     }
 
@@ -50,38 +51,46 @@ public class Leitor {
         return new double[quantidadeDeLinhas][quantidadeDeColunas];
     }
 
-    private void separarEquacao(double[][] matriz) {
+    private void separarEquacao() {
         List<String> ladoEsquerdo = new ArrayList<>();
         List<Integer> ladoDireito = new ArrayList<>();
 
-        //para cada linha do meu sistema
+        //para cada linha do meu sistema, vou substituir a linha original pela mesma versão dela sem espaços (2x + 3y - z = 10 -> 2x+3y-z=10).
+        linhasEquacao.replaceAll(linha -> linha.replaceAll("\\s", ""));
+
+        //para cada linha do meu sistema, vou separar a minha linha entre valores do lado esquerdo e valores do lado direito.
         for(int i = 0; i < linhasEquacao.size(); i++) {
-            //vou substituir a linha original pela mesma versão dela sem espaços (2x + 3y - z = 10 -> 2x+3y-z=10)
-            linhasEquacao.set(i, linhasEquacao.get(i).replaceAll("\\s+", ""));
-            //vou separar a minha linha entre valores do lado esquerdo e valores do lado direito;
             String[] partes = linhasEquacao.get(i).split("=");
             ladoEsquerdo.add(partes[0]);
             ladoDireito.add(Integer.valueOf(partes[1]));
         }
-        mapearVariaveis(ladoEsquerdo);
+        Map<Character, Integer> mapaVariaveis = mapearVariaveis(ladoEsquerdo);
     }
 
-    private void mapearVariaveis(List<String> ladoEsquerdo) {
-        Set<Character> variaveisUnicas = new HashSet<>();
+    private Map<Character, Integer> mapearVariaveis(List<String> ladoEsquerdo) {
+        /*
+        para cada linha do meu lado esquerdo, vou fazer um mapeamento de caractere por caractere,
+        retornando a posicao dele na tabela ASCII (tabela de caracteres), filtrando apenas letras e
+        convertendo de posicao da tabela diretamente para um caractere, todos devem ser unicos, sem repeticoes,
+        devem ser ordenados em ordem alfabetica e devem estar em formato de uma lista (filtrada e ordenada com apenas letras).
+         */
+        List<Character> variaveis = ladoEsquerdo.stream()
+                .flatMap(lado -> lado.chars()
+                        .filter(Character::isLetter)
+                        .mapToObj(c -> (char) c))
+                .distinct()
+                .sorted()
+                .toList();
 
-        for(int i = 0; i < linhasEquacao.size(); i++) {
-            String[] todasAsVariaveis = linhasEquacao.get(i).split("[a-zA-Z]");
-            for(int y = 0; y < todasAsVariaveis.length; y++) {
-                variaveisUnicas.add(todasAsVariaveis[y].charAt(0));
-            }
-        }
-
-        List<Character> variaveis = new ArrayList<>(variaveisUnicas);
-        Collections.sort(variaveis);
+        //mapeando cada elemento da lista em uma posicao, para definir o local de cada coeficiente dentro da matriz com base na sua variável.
         Map<Character, Integer> mapaVariaveis = new HashMap<>();
-
         for(int i = 0; i < variaveis.size(); i++) {
             mapaVariaveis.put(variaveis.get(i), i);
         }
+        return mapaVariaveis;
+    }
+
+    private void mapearCoeficientes() {
+
     }
 }
