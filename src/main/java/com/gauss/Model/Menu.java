@@ -17,7 +17,7 @@ public class Menu {
             String opcao;
             do {
                 exibirOpcoes();
-                opcao = sc.next().trim();
+                opcao = sc.nextLine().trim();
 
                 switch(opcao) {
                     case "1" -> enviarArquivo();

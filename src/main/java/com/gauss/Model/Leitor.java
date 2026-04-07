@@ -8,7 +8,8 @@ public class Leitor {
     private String linha;
     private List<String> linhasEquacao;
     private double[][] matriz;
-    private int asd;
+    private int quantidadeDeColunas;
+    private int quantidadeDeLinhas;
 
     public Leitor(Scanner sc) {
         this.linhasEquacao = new ArrayList<>();
@@ -17,7 +18,7 @@ public class Leitor {
     }
 
     public double[][] lerEquacaoArquivo() {
-        String caminhoArquivo = sc.next();
+        String caminhoArquivo = sc.nextLine().trim().replace("\"", "");
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(caminhoArquivo));
             while((linha = bufferedReader.readLine()) != null) {
@@ -39,32 +40,25 @@ public class Leitor {
 
     private double[][] obterMatriz() {
         matriz = obterTamanhoMatriz();
-        separarEquacao();
-        for(int i  = 0; i <= linhasEquacao.size() - 1; i++) {
-            System.out.println("linha: " + i);
-            for(int j  = 0; j < asd; j++) {
-                System.out.println("coluna: " + j);
-                System.out.println(matriz[i][j]);
-            }
-            System.out.println("\n");
-        }
+        separarEquacaoEPreencherMatriz();
+        exibirMatriz();
         return matriz;
     }
 
     private double[][] obterTamanhoMatriz() {
-        int quantidadeDeLinhas = linhasEquacao.size();
-        int quantidadeDeColunas = 0;
+        quantidadeDeLinhas = linhasEquacao.size();
+        quantidadeDeColunas = 0;
         for(String linhas : linhasEquacao) {
-            String[] variaveis = linhas.split("[+=-]");
-            if(variaveis.length > quantidadeDeColunas) quantidadeDeColunas = variaveis.length;
+            String[] lados = linhas.split("=");
+            String[] variaveis = lados[0].replaceAll("^[+\\-]", "").split("[+\\-]");
+            if(variaveis.length + 1 > quantidadeDeColunas) quantidadeDeColunas = variaveis.length + 1;
         }
-        asd = quantidadeDeColunas;
         return new double[quantidadeDeLinhas][quantidadeDeColunas];
     }
 
-    private void separarEquacao() {
+    private void separarEquacaoEPreencherMatriz() {
         List<String> ladoEsquerdo = new ArrayList<>();
-        List<Integer> ladoDireito = new ArrayList<>();
+        List<Double> ladoDireito = new ArrayList<>();
 
         //para cada linha do meu sistema, vou substituir a linha original pela mesma versão dela sem espaços (2x + 3y - z = 10 -> 2x+3y-z=10).
         linhasEquacao.replaceAll(linha -> linha.replaceAll("\\s", ""));
@@ -73,10 +67,11 @@ public class Leitor {
         for(int i = 0; i < linhasEquacao.size(); i++) {
             String[] partes = linhasEquacao.get(i).split("=");
             ladoEsquerdo.add(partes[0]);
-            ladoDireito.add(Integer.valueOf(partes[1]));
+            ladoDireito.add(Double.parseDouble(partes[1]));
         }
         Map<Character, Integer> mapaVariaveis = mapearVariaveis(ladoEsquerdo);
         mapearCoeficientes(mapaVariaveis, ladoEsquerdo);
+        definirValoresMatrizLadoDireito(ladoDireito);
     }
 
     private Map<Character, Integer> mapearVariaveis(List<String> ladoEsquerdo) {
@@ -112,7 +107,7 @@ public class Leitor {
                 double valor = obterCoeficiente(coeficientes[j].replaceAll("[a-zA-Z]", ""));
                 mapaCoeficientes.put(variavelKey, valor);
             }
-            definirValoresMatriz(mapaCoeficientes, variaveis, i);
+            definirValoresMatrizLadoEsquerdo(mapaCoeficientes, variaveis, i);
             mapaCoeficientes.clear();
         }
     }
@@ -124,10 +119,26 @@ public class Leitor {
         return sinal.equals("-") ? -valor : + valor;
     }
 
-    private void definirValoresMatriz(Map<Character, Double> coeficientes, Map<Character, Integer> variaveis, int linha) {
+    private void definirValoresMatrizLadoEsquerdo(Map<Character, Double> coeficientes, Map<Character, Integer> variaveis, int linha) {
         for(Map.Entry<Character, Double> entry : coeficientes.entrySet()) {
             int coluna = variaveis.get(entry.getKey());
             matriz[linha][coluna] = entry.getValue();
+        }
+    }
+
+    private void definirValoresMatrizLadoDireito(List<Double> ladoDireito) {
+        for(int i = 0; i < ladoDireito.size(); i++) {
+            matriz[i][quantidadeDeColunas - 1] = ladoDireito.get(i);
+        }
+    }
+
+    private void exibirMatriz() {
+        for(int i  = 0; i <= quantidadeDeLinhas - 1; i++) {
+            System.out.print("|");
+            for(int j  = 0; j < quantidadeDeColunas; j++) {
+                System.out.printf(j == 0 ? "%4.1f" : "%8.1f", matriz[i][j]);
+            }
+            System.out.println("|");
         }
     }
 
