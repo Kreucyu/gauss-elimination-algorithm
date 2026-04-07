@@ -8,6 +8,7 @@ public class Leitor {
     private String linha;
     private List<String> linhasEquacao;
     private double[][] matriz;
+    private int asd;
 
     public Leitor(Scanner sc) {
         this.linhasEquacao = new ArrayList<>();
@@ -39,6 +40,14 @@ public class Leitor {
     private double[][] obterMatriz() {
         matriz = obterTamanhoMatriz();
         separarEquacao();
+        for(int i  = 0; i <= linhasEquacao.size() - 1; i++) {
+            System.out.println("linha: " + i);
+            for(int j  = 0; j < asd; j++) {
+                System.out.println("coluna: " + j);
+                System.out.println(matriz[i][j]);
+            }
+            System.out.println("\n");
+        }
         return matriz;
     }
 
@@ -49,6 +58,7 @@ public class Leitor {
             String[] variaveis = linhas.split("[+=-]");
             if(variaveis.length > quantidadeDeColunas) quantidadeDeColunas = variaveis.length;
         }
+        asd = quantidadeDeColunas;
         return new double[quantidadeDeLinhas][quantidadeDeColunas];
     }
 
