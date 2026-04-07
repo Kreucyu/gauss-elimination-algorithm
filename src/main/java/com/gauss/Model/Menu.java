@@ -36,7 +36,7 @@ public class Menu {
                       -> Digite seu sistema linha por linha <-
                 -> Quando finalizar, digite um '.' e aperte Enter <-
                 """);
-        gauss.realizarCalculo(leitor.lerEquacaoDigitada());
+        gauss.realizarCalculo(leitor.lerEquacaoDigitada(), leitor);
     }
 
     private void enviarArquivo() {

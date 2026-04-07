@@ -17,6 +17,8 @@ public class Leitor {
         this.matriz = null;
     }
 
+    public Leitor() {}
+
     public double[][] lerEquacaoArquivo() {
         String caminhoArquivo = sc.nextLine().trim().replace("\"", "");
         try {
@@ -142,4 +144,11 @@ public class Leitor {
         }
     }
 
+    public int getQuantidadeDeColunas() {
+        return quantidadeDeColunas;
+    }
+
+    public int getQuantidadeDeLinhas() {
+        return quantidadeDeLinhas;
+    }
 }
