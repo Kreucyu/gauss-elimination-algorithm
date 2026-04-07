@@ -43,6 +43,7 @@ public class Leitor {
     private double[][] obterMatriz() {
         matriz = obterTamanhoMatriz();
         separarEquacaoEPreencherMatriz();
+        System.out.println("\nA matriz é: \n");
         exibirMatriz();
         return matriz;
     }
@@ -134,7 +135,7 @@ public class Leitor {
         }
     }
 
-    private void exibirMatriz() {
+    public void exibirMatriz() {
         for(int i  = 0; i <= quantidadeDeLinhas - 1; i++) {
             System.out.print("|");
             for(int j  = 0; j < quantidadeDeColunas; j++) {
@@ -150,5 +151,12 @@ public class Leitor {
 
     public int getQuantidadeDeLinhas() {
         return quantidadeDeLinhas;
+    }
+
+    public void limpar() {
+        linha = null;
+        linhasEquacao.clear();
+        quantidadeDeColunas = 0;
+        quantidadeDeLinhas = 0;
     }
 }

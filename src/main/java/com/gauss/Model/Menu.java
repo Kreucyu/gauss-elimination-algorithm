@@ -41,7 +41,7 @@ public class Menu {
 
     private void enviarArquivo() {
         System.out.print("\nDigite o caminho do seu arquivo: ");
-        gauss.realizarCalculo(leitor.lerEquacaoArquivo());
+        gauss.realizarCalculo(leitor.lerEquacaoArquivo(), leitor);
     }
 
     private void exibirOpcoes() {
