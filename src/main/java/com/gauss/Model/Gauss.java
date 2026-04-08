@@ -7,6 +7,7 @@ public class Gauss {
     }
 
     public void realizarCalculo(double[][] matriz, Leitor leitor) {
+        Classificador classificador = new Classificador();
         linhasMatriz = leitor.getQuantidadeDeLinhas();
         colunasMatriz = leitor.getQuantidadeDeColunas();
 
@@ -30,7 +31,7 @@ public class Gauss {
             System.out.println("[A(" + (i + 1) + ")|b(" + (i + 1) + ")]:\n");
             leitor.exibirMatriz();
         }
-        definirValorVariaveis();
+        classificador.classificarMatriz(matriz, linhasMatriz, colunasMatriz);
         linhasMatriz = 0;
         colunasMatriz = 0;
         leitor.limpar();
@@ -55,9 +56,5 @@ public class Gauss {
                 matriz[linha][j] = temp;
             }
         }
-    }
-
-    private void definirValorVariaveis() {
-        Classificador classificador = new Classificador();
     }
 }
