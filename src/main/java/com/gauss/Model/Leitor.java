@@ -33,6 +33,8 @@ public class Leitor {
             while((linha = bufferedReader.readLine()) != null) {
                 this.linhasEquacao.add(linha);
             }
+            System.out.print("\nSistema:\n\n");
+            exibirSistema();
             return obterMatriz();
         } catch (IOException e) {
             throw new RuntimeException("Erro, não foi possível ler o arquivo: ", e);
@@ -48,6 +50,8 @@ public class Leitor {
             if(linha.isEmpty()) continue;
             linhasEquacao.add(linha);
         }
+        System.out.print("\nSistema:\n\n");
+        exibirSistema();
         return obterMatriz();
     }
 
@@ -193,6 +197,10 @@ public class Leitor {
 
     //esse metodo serve para exibir a matriz, definindo o espaçamento entre os valores para que fiquem simétricos, percorrendo elementos um por um e exibindo-os.
     public void exibirMatriz() {
+            for(int j  = 0; j < quantidadeDeColunas - 1; j++) {
+                System.out.printf(j == 0 ? "%4s" : "%8s", mapaColunas.get(j));
+            }
+        System.out.printf("%8s\n", "b");
         for(int i  = 0; i <= quantidadeDeLinhas - 1; i++) {
             System.out.print("|");
             for(int j  = 0; j < quantidadeDeColunas; j++) {
@@ -217,5 +225,11 @@ public class Leitor {
         linhasEquacao.clear();
         quantidadeDeColunas = 0;
         quantidadeDeLinhas = 0;
+    }
+
+    private void exibirSistema() {
+        for(String linha : linhasEquacao) {
+            System.out.println(linha);
+        }
     }
 }

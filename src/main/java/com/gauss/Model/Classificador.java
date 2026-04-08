@@ -68,7 +68,9 @@ public class Classificador {
             }
 
             if (pivo == -1) continue;
-            String expressao = String.valueOf(matriz[i][colunasMatriz - 1]);
+            double termoIndependente = matriz[i][colunasMatriz - 1];
+            double valorPivo = matriz[i][pivo];
+            String expressao = formatarNumero(termoIndependente);
 
             for (int j = pivo + 1; j < colunasMatriz - 1; j++) {
                 String valorVariavel = variaveisResolvidas.get(colunas.get(j));
@@ -76,22 +78,55 @@ public class Classificador {
                 if(valorVariavel == null) continue;
 
                 double coeficiente = matriz[i][j];
-                if(coeficiente > 0) {
-                    expressao += "-" + coeficiente + "*" + valorVariavel;
+
+                if(Math.abs(coeficiente) < 1e-9) continue;
+
+                try {
+                    double valorNumerico = Double.parseDouble(valorVariavel);
+                    double produto = coeficiente * valorNumerico;
+                    String sinal = produto >= 0 ? " - " : " + ";
+                    expressao += sinal + formatarNumero(Math.abs(produto));
                     continue;
+                } catch (NumberFormatException e) {
+
                 }
-                expressao += "+" + Math.abs(coeficiente) +  "*" + valorVariavel;
+
+                String coeficienteFormatado = (Math.abs(Math.abs(coeficiente) - 1.0) < 1e-9) ? "" :
+                        formatarNumero(Math.abs(coeficiente)) + " * ";
+
+                String sinal = coeficiente > 0 ? " - " : " + ";
+
+                String valorExibido = valorVariavel.contains(" ")
+                        ? "(" + valorVariavel + ")" : valorVariavel;
+                expressao += sinal +  coeficienteFormatado + valorExibido;
+            }
+            if(Math.abs(valorPivo - 1.0) > 1e-9) {
+                try {
+                    double valorNumerico = Double.parseDouble(expressao);
+                    expressao = formatarNumero(valorNumerico / valorPivo);
+                } catch (NumberFormatException e) {
+                    expressao = "(" + expressao + ") / " + formatarNumero(valorPivo);
+                }
             }
             variaveisResolvidas.put(colunas.get(pivo), expressao);
         }
-
-        for (Map.Entry<Character, String> entry : variaveisResolvidas.entrySet()) {
-            String valor = entry.getValue();
-            char variavel = entry.getKey();
-            solucoes.add(variavel + "= " + valor);
+        List<Character> ordem = new ArrayList<>();
+        for(int i = 0; i < colunasMatriz - 1; i++) {
+            ordem.add(colunas.get(i));
         }
-        Collections.sort(solucoes);
+        for(Character valor : ordem) {
+            if(variaveisResolvidas.containsKey(valor)) {
+                solucoes.add(valor + "= " + variaveisResolvidas.get(valor));
+            }
+        }
         return "Conjunto solução: " + solucoes.toString();
+    }
+
+    private String formatarNumero(double numero) {
+        if(Math.abs(numero - Math.round(numero)) < 1e-9) {
+            return String.valueOf((long) Math.round(numero));
+        }
+        return String.format("%.1f", numero);
     }
 
     private String obterConjuntoSolucaoSPD(double[][] matriz, Map<Integer, Character> colunas, int linhasMatriz, int colunasMatriz) {
@@ -123,13 +158,17 @@ public class Classificador {
             variaveisResolvidas.put(colunas.get(pivo), valorVariavel);
         }
 
-        for (Map.Entry<Character, Double> entry : variaveisResolvidas.entrySet()) {
-            double valor = entry.getValue();
-            char variavel = entry.getKey();
-            solucoes.add(variavel + "= " + String.format("%.2f", valor));
+        List<Character> ordem = new ArrayList<>();
+        for(int i = 0; i < colunasMatriz - 1; i++) {
+            ordem.add(colunas.get(i));
         }
-        variaveisResolvidas.clear();
-        Collections.sort(solucoes);
+        for(Character valor : ordem) {
+            if(variaveisResolvidas.containsKey(valor)) {
+                solucoes.add(valor + "= " + String.format("%.2f", variaveisResolvidas.get(valor)));
+            }
+        }
         return "Conjunto solução: " + solucoes.toString();
     }
+
+
 }
