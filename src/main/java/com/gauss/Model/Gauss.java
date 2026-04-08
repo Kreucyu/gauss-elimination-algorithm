@@ -1,5 +1,7 @@
 package com.gauss.Model;
 
+import java.sql.SQLOutput;
+
 public class Gauss {
     int linhasMatriz;
     int colunasMatriz;
@@ -32,7 +34,15 @@ public class Gauss {
             leitor.exibirMatriz();
         }
         System.out.println("\nO tipo do sistema é: ");
-        System.out.println("\n" + classificador.classificarMatriz(matriz, linhasMatriz, colunasMatriz));
+
+
+
+        int tipo = classificador.classificarMatriz(matriz, linhasMatriz, colunasMatriz);
+        switch(tipo) {
+            case 1 -> System.out.println("SI - Sistema Impossível\nConjunto solução S = {}");
+            case 2 -> System.out.println("SPI - Sistema Possível Indeterminado\n" + obterConjuntoSolucaoSPI(matriz));
+            case 3 -> System.out.println("SPD - Sistema Possível Determinado\n" + obterConjuntoSolucaoSPD(matriz));
+        }
         linhasMatriz = 0;
         colunasMatriz = 0;
         leitor.limpar();
@@ -57,5 +67,15 @@ public class Gauss {
                 matriz[linha][j] = temp;
             }
         }
+    }
+
+    private String obterConjuntoSolucaoSPI(double[][] matriz) {
+
+        return null;
+    }
+
+    private String obterConjuntoSolucaoSPD(double[][] matriz) {
+
+        return null;
     }
 }
