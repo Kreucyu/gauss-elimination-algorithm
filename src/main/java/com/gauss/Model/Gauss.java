@@ -31,7 +31,8 @@ public class Gauss {
             System.out.println("[A(" + (i + 1) + ")|b(" + (i + 1) + ")]:\n");
             leitor.exibirMatriz();
         }
-        classificador.classificarMatriz(matriz, linhasMatriz, colunasMatriz);
+        System.out.println("\nO tipo do sistema é: ");
+        System.out.println("\n" + classificador.classificarMatriz(matriz, linhasMatriz, colunasMatriz));
         linhasMatriz = 0;
         colunasMatriz = 0;
         leitor.limpar();
