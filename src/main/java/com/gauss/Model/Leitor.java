@@ -17,8 +17,12 @@ public class Leitor {
         this.matriz = null;
     }
 
-    public Leitor() {}
-
+    /*
+    metodo responsável por ler o arquivo do sistema, recebendo o
+    caminho do arquivo do usuário e transformando em uma lista de linhas,
+    removendo aspas e espaços em branco desnecessários para não ocorrer
+    inconsistensias na leitura.
+    */
     public double[][] lerEquacaoArquivo() {
         String caminhoArquivo = sc.nextLine().trim().replace("\"", "");
         try {
@@ -32,6 +36,10 @@ public class Leitor {
         }
     }
 
+    /*
+    metodo que lê a entrada do usuário digitada e transforma as linhas em uma
+    lista de linhas, ignorando linhas vazias e encerrando quando o usuario digitar um (.).
+    */
     public double[][]  lerEquacaoDigitada() {
         while(!(linha = sc.nextLine()).equals(".")) {
             if(linha.isEmpty()) continue;
@@ -40,6 +48,12 @@ public class Leitor {
         return obterMatriz();
     }
 
+    /*
+    metodo responsável por passar uma matriz como retorno, após transformar o texto do usuário
+    em valores da matriz, coleta os dados de tamanho da matriz por meio do metodo obterTamanhoMatriz(),
+    em seguida chama o metodo responsável por separar e preencher a matriz, depois de preencher, chama
+    exibirMatriz() para mostrar a estrutura inicial da mesma.
+     */
     private double[][] obterMatriz() {
         matriz = obterTamanhoMatriz();
         separarEquacaoEPreencherMatriz();
@@ -48,6 +62,16 @@ public class Leitor {
         return matriz;
     }
 
+    /*
+    esse metodo realiza o cáluclo do tamanho de linhas e colunas que a matriz vai ter, sendo a quantidade
+    de linhas o tamanho da lista de linhas coletada da entrada do usuário (passando arquivo ou digitando) e,
+    a quantidade de colunas é feito um cálculo com base em um loop de repetição, é feita a leitura da lista de linhas,
+    para cada linha dentro da lista, irá ser feito um recorte da equação, separando o lado antes e depois do sinal de =,
+    no lado antes do sinal, é removido todos os sinais do começo da linha, para evitar espaços em branco no cálculo e,
+    em seguida é feito o recorte dos restantes dos valores com base no sinal de + ou de -, com o contador do número de
+    colunas atualizando conforme encontra uma linha com mais variáveis do que a anterior, se não encontrar nenhuma linha
+    com mais variáveis, mantém o maior valor encontrado, depois retorna a criação de uma nova matriz com os valores calculados.
+     */
     private double[][] obterTamanhoMatriz() {
         quantidadeDeLinhas = linhasEquacao.size();
         quantidadeDeColunas = 0;
@@ -59,6 +83,13 @@ public class Leitor {
         return new double[quantidadeDeLinhas][quantidadeDeColunas];
     }
 
+    /*
+    metodo que divide os valores da matriz em lado esquerdo e direito, para depois montar a matriz escalonada, removendo espaços
+    entre os valores e fazendo a separação, criando um mapa de variáveis que vai servir para mapear os coeficientes dentro da matriz,
+    utilizando a varíavel como chave para descobrir tanto o coeficiente quanto a posição que ele vai ocupar na matriz, chamando
+    mapearCoeficientes() passando o mapa de variaveis e o lado esquerdo da equação, depois chamando o metodo que define o lado direito
+    da equação dentro da matriz.
+     */
     private void separarEquacaoEPreencherMatriz() {
         List<String> ladoEsquerdo = new ArrayList<>();
         List<Double> ladoDireito = new ArrayList<>();
@@ -77,6 +108,7 @@ public class Leitor {
         definirValoresMatrizLadoDireito(ladoDireito);
     }
 
+    //metodo que mapeia todas as variaveis de acordo com a posicao dentro da matriz.
     private Map<Character, Integer> mapearVariaveis(List<String> ladoEsquerdo) {
         /*
         para cada linha do meu lado esquerdo, vou fazer um mapeamento de caractere por caractere,
@@ -100,6 +132,9 @@ public class Leitor {
         return mapaVariaveis;
     }
 
+    /*
+    metodo que utiliza o mapa de variaveis para mapear da forma correta os coeficientes em suas devidas linhas e colunas dentro da matriz.
+     */
     private void mapearCoeficientes(Map<Character, Integer> variaveis, List<String> ladoEsquerdo) {
         Map<Character, Double> mapaCoeficientes = new HashMap<>();
         for(int i = 0; i < ladoEsquerdo.size(); i++) {
