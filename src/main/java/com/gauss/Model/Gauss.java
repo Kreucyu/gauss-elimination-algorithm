@@ -8,6 +8,7 @@ public class Gauss {
     public Gauss() {
     }
 
+    //metodo responsável por executar a eliminação de Gauss, recebendo uma instância da classe leitor e a matriz do sistema.
     public void realizarCalculo(double[][] matriz, Leitor leitor) {
         Classificador classificador = new Classificador();
         linhasMatriz = leitor.getQuantidadeDeLinhas();
@@ -15,9 +16,11 @@ public class Gauss {
 
         System.out.println("\nIniciando cálculo: ");
 
+        //inicio um laço de repetição que irá percorrer a matriz buscando seus pivôs.
         int i = 0;
         for(int colunaPivo = 0; i < linhasMatriz - 1 && colunaPivo < colunasMatriz - 1; colunaPivo++) {
 
+            //se meu pivô for nulo ou proximo de zero, irá realizar a troca.
             if(Math.abs(matriz[i][colunaPivo]) < 1e-9) {
                 boolean trocou = substituirPivoNulo(matriz, i, colunaPivo);
                 if(!trocou) continue;
@@ -27,22 +30,31 @@ public class Gauss {
             double pivo = matriz[i][colunaPivo];
             System.out.printf("\nPivô atual: " + String.format("%.1f", pivo) + "\n");
 
+            //irá realizar o cálculo do multiplicador para alterar os valores da tabela
             for(int j = i + 1; j < linhasMatriz; j++) {
                 double multiplicador = matriz[j][colunaPivo] / pivo;
                 for(int k = 0; k < colunasMatriz; k++) {
+                    //reduz todos os elementos da linha pelo cálculo do multiplicador com base na linha do pivô
                     matriz[j][k] = matriz[j][k] - (multiplicador * matriz[i][k]);
                 }
             }
+            //exibe em qual matriz intermediária está
             System.out.println("\n[A(" + (i + 1) + ")|b(" + (i + 1) + ")]:\n");
             leitor.exibirMatriz();
             i++;
         }
+        //após realizar o escalonamento da matriz, chama o classificador para classificar o tipo do sistema e seu conjunto solução.
         classificador.classificarMatriz(matriz, linhasMatriz, colunasMatriz, leitor.getMapaColunas());
+        //limpa os dados para poder iniciar outro calculo de outro sistema.
         linhasMatriz = 0;
         colunasMatriz = 0;
         leitor.limpar();
     }
 
+    /*
+    metodo de substituir pivo nulo, buscando um candidato que sirva, se houver
+    mais de um candidato pega o de maior valor, faz a troca das linhas e retorna que a troca foi concluída.
+     */
     private boolean substituirPivoNulo(double[][] matriz, int i, int colunaPivo) {
         double candidato = 0;
         int linha = -1;
