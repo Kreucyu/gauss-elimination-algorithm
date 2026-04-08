@@ -10,6 +10,9 @@ public class Leitor {
     private double[][] matriz;
     private int quantidadeDeColunas;
     private int quantidadeDeLinhas;
+    private Map<Character, Integer> mapaVariaveis;
+    private Map<Character, Double> mapaCoeficientes;
+    private Map<Integer, Character> mapaColunas;
 
     public Leitor(Scanner sc) {
         this.linhasEquacao = new ArrayList<>();
@@ -103,7 +106,7 @@ public class Leitor {
             ladoEsquerdo.add(partes[0]);
             ladoDireito.add(Double.parseDouble(partes[1]));
         }
-        Map<Character, Integer> mapaVariaveis = mapearVariaveis(ladoEsquerdo);
+        mapaVariaveis = mapearVariaveis(ladoEsquerdo);
         mapearCoeficientes(mapaVariaveis, ladoEsquerdo);
         definirValoresMatrizLadoDireito(ladoDireito);
     }
@@ -125,9 +128,11 @@ public class Leitor {
                 .toList();
 
         //mapeando cada elemento da lista em uma posicao, para definir o local de cada coeficiente dentro da matriz com base na sua variável.
-        Map<Character, Integer> mapaVariaveis = new HashMap<>();
+        mapaVariaveis = new HashMap<>();
+        mapaColunas = new HashMap<>();
         for(int i = 0; i < variaveis.size(); i++) {
             mapaVariaveis.put(variaveis.get(i), i);
+            mapaColunas.put(i, variaveis.get(i));
         }
         return mapaVariaveis;
     }
@@ -136,7 +141,7 @@ public class Leitor {
     metodo que utiliza o mapa de variaveis para mapear da forma correta os coeficientes em suas devidas linhas e colunas dentro da matriz.
      */
     private void mapearCoeficientes(Map<Character, Integer> variaveis, List<String> ladoEsquerdo) {
-        Map<Character, Double> mapaCoeficientes = new HashMap<>();
+        mapaCoeficientes = new HashMap<>();
         for(int i = 0; i < ladoEsquerdo.size(); i++) {
             //crio uma lista de coeficientes separando os valores pelo sinal, fazendo um recorte de cada valor do lado esquerdo.
             String[] coeficientes = ladoEsquerdo.get(i).split("(?=[+-])");
@@ -197,15 +202,14 @@ public class Leitor {
         }
     }
 
-    //retorna quantidade de colunas, para consulta por outras classes fora desta.
+    //retorna valores desta classe, para consulta por outras classes fora desta.
     public int getQuantidadeDeColunas() {
         return quantidadeDeColunas;
     }
-
-    //retorna quantidade de linhas, para consulta por outras classes fora desta.
     public int getQuantidadeDeLinhas() {
         return quantidadeDeLinhas;
     }
+    public Map<Integer, Character> getMapaColunas() {return Collections.unmodifiableMap(mapaColunas);}
 
     //limpa todos os dados encontrados no cálculo e na matriz, para que quando o usuário enviar outro sistema, o cálculo recomeçar do zero.
     public void limpar() {

@@ -1,6 +1,6 @@
 package com.gauss.Model;
 
-import java.sql.SQLOutput;
+import java.util.*;
 
 public class Gauss {
     int linhasMatriz;
@@ -34,14 +34,11 @@ public class Gauss {
             leitor.exibirMatriz();
         }
         System.out.println("\nO tipo do sistema é: ");
-
-
-
         int tipo = classificador.classificarMatriz(matriz, linhasMatriz, colunasMatriz);
         switch(tipo) {
-            case 1 -> System.out.println("SI - Sistema Impossível\nConjunto solução S = {}");
-            case 2 -> System.out.println("SPI - Sistema Possível Indeterminado\n" + obterConjuntoSolucaoSPI(matriz));
-            case 3 -> System.out.println("SPD - Sistema Possível Determinado\n" + obterConjuntoSolucaoSPD(matriz));
+            case 1 -> System.out.println("\nSI - Sistema Impossível\nConjunto solução S = {}");
+            case 2 -> System.out.println("\nSPI - Sistema Possível Indeterminado\n\n" + obterConjuntoSolucaoSPI(matriz));
+            case 3 -> System.out.println("\nSPD - Sistema Possível Determinado\n\n" + obterConjuntoSolucaoSPD(matriz, leitor.getMapaColunas()));
         }
         linhasMatriz = 0;
         colunasMatriz = 0;
@@ -74,8 +71,41 @@ public class Gauss {
         return null;
     }
 
-    private String obterConjuntoSolucaoSPD(double[][] matriz) {
+    private String obterConjuntoSolucaoSPD(double[][] matriz, Map<Integer, Character> colunas) {
+        Map<Character, Double> variaveisResolvidas = new LinkedHashMap<>();
+        List<String> solucoes = new ArrayList<>();
+        double valorVariavel = 0;
 
-        return null;
+        for(int i = linhasMatriz - 1; i >= 0; i--) {
+            double termoIndependente = matriz[i][colunasMatriz - 1];
+            int pivo = -1;
+            for(int j = 0; j < colunasMatriz - 1; j++) {
+                if(matriz[i][j] != 0) {
+                    pivo = j;
+                    break;
+                }
+            }
+            if(i == linhasMatriz - 1) {
+                valorVariavel = termoIndependente / matriz[i][pivo];
+                variaveisResolvidas.put(colunas.get(pivo), valorVariavel);
+                continue;
+            }
+            for(int j = pivo + 1; j < colunasMatriz - 1; j++) {
+                if(variaveisResolvidas.get(colunas.get(j)) != null) {
+                    double resultado = matriz[i][j] * variaveisResolvidas.get(colunas.get(j));
+                    termoIndependente -= resultado;
+                }
+            }
+            valorVariavel = termoIndependente / matriz[i][pivo];
+            variaveisResolvidas.put(colunas.get(pivo), valorVariavel);
+        }
+
+        for(Map.Entry<Character, Double> entry : variaveisResolvidas.entrySet()) {
+            double valor = entry.getValue();
+            char variavel = entry.getKey();
+            solucoes.add(variavel + "= " + String.format("%.2f", valor));
+        }
+
+        return solucoes.toString();
     }
 }
