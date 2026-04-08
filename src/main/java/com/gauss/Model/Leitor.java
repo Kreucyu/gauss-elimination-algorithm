@@ -227,6 +227,7 @@ public class Leitor {
         quantidadeDeLinhas = 0;
     }
 
+    //metodo para exibir o sistema enviado pelo usuário.
     private void exibirSistema() {
         for(String linha : linhasEquacao) {
             System.out.println(linha);
