@@ -138,18 +138,28 @@ public class Leitor {
     private void mapearCoeficientes(Map<Character, Integer> variaveis, List<String> ladoEsquerdo) {
         Map<Character, Double> mapaCoeficientes = new HashMap<>();
         for(int i = 0; i < ladoEsquerdo.size(); i++) {
+            //crio uma lista de coeficientes separando os valores pelo sinal, fazendo um recorte de cada valor do lado esquerdo.
             String[] coeficientes = ladoEsquerdo.get(i).split("(?=[+-])");
             for(int j = 0; j < coeficientes.length; j++) {
+                //substituo tudo o que não for letra por espaços vazios para obter apenas a variável.
                 String variavel = coeficientes[j].replaceAll("[^a-zA-Z]", "");
                 char variavelKey = variavel.charAt(0);
+                //substituo todas as letras por espaços vazios para obter apenas o sinal + valor do coeficiente.
                 double valor = obterCoeficiente(coeficientes[j].replaceAll("[a-zA-Z]", ""));
+                //defino o coeficiente com a chave sendo a variável dentro do mapa de coeficientes.
                 mapaCoeficientes.put(variavelKey, valor);
             }
+            //chamo os métodos para definir aquela linha na matriz e depois reinicio os valores do mapa.
             definirValoresMatrizLadoEsquerdo(mapaCoeficientes, variaveis, i);
             mapaCoeficientes.clear();
         }
     }
 
+    /*
+    metodo responsável por coletar o sinal e o número do coeficiente, decidindo se tem algum valor ou se é 1 (apenas a variável aparece),
+    depois, retorno o valor do coeficiente ja com o sinal, se o sinal é -, retorna o valor encontrado negativo, se for + ou não ter nenhum
+    sinal vai retornar o valor positivo.
+     */
     private double obterCoeficiente(String coeficiente) {
         String sinal = coeficiente.replaceAll("[0-9.]", "");
         String numero = coeficiente.replaceAll("[^0-9]", "");
@@ -157,6 +167,11 @@ public class Leitor {
         return sinal.equals("-") ? -valor : + valor;
     }
 
+    /*
+    esse metodo foi utilizado para definir o lado A da matriz escalonada, percorrendo todos os elementos do meu mapa de forma que seja "apenas visualização",
+   e para cada valor eu pegava a chave do meu coeficiente (variável) e fazia uma busca dentro do meu mapa de variáveis, utilizando essa chave para obter o
+   valor da coluna responsável por aquela variável dentro da minha matriz, fazia coeficiente -> variável -> posição -> matriz(posição) = coeficiente.
+     */
     private void definirValoresMatrizLadoEsquerdo(Map<Character, Double> coeficientes, Map<Character, Integer> variaveis, int linha) {
         for(Map.Entry<Character, Double> entry : coeficientes.entrySet()) {
             int coluna = variaveis.get(entry.getKey());
@@ -164,12 +179,14 @@ public class Leitor {
         }
     }
 
+    //para esse lado, apenas peguei os valores do lado direito das linhas e setei eles na posicao mais a direita das minhas linhas da matriz.
     private void definirValoresMatrizLadoDireito(List<Double> ladoDireito) {
         for(int i = 0; i < ladoDireito.size(); i++) {
             matriz[i][quantidadeDeColunas - 1] = ladoDireito.get(i);
         }
     }
 
+    //esse metodo serve para exibir a matriz, definindo o espaçamento entre os valores para que fiquem simétricos, percorrendo elementos um por um e exibindo-os.
     public void exibirMatriz() {
         for(int i  = 0; i <= quantidadeDeLinhas - 1; i++) {
             System.out.print("|");
@@ -180,14 +197,17 @@ public class Leitor {
         }
     }
 
+    //retorna quantidade de colunas, para consulta por outras classes fora desta.
     public int getQuantidadeDeColunas() {
         return quantidadeDeColunas;
     }
 
+    //retorna quantidade de linhas, para consulta por outras classes fora desta.
     public int getQuantidadeDeLinhas() {
         return quantidadeDeLinhas;
     }
 
+    //limpa todos os dados encontrados no cálculo e na matriz, para que quando o usuário enviar outro sistema, o cálculo recomeçar do zero.
     public void limpar() {
         linha = null;
         linhasEquacao.clear();
